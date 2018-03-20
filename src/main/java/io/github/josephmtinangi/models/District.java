@@ -1,14 +1,17 @@
 package io.github.josephmtinangi.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -28,6 +31,9 @@ public class District {
 	@ManyToOne
 	@JoinColumn(name = "region_id", nullable = false)
 	private Region region;
+
+	@OneToMany(mappedBy = "district", targetEntity = Ward.class, fetch = FetchType.LAZY)
+	private List<Ward> wards;
 
 	@Column(name = "created_at", updatable = false)
 	private Date createdAt;
@@ -75,6 +81,14 @@ public class District {
 
 	public void setRegion(Region region) {
 		this.region = region;
+	}
+
+	public List<Ward> getWards() {
+		return wards;
+	}
+
+	public void setWards(List<Ward> wards) {
+		this.wards = wards;
 	}
 
 	public Date getCreatedAt() {
