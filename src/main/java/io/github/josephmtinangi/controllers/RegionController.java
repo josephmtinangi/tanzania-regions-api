@@ -37,8 +37,28 @@ public class RegionController {
 
 		for (Region region : regions) {
 			regionMap.put("name", region.getName());
+			regionMap.put("url", appURL + "/regions/" + region.getSlug());
 			regionMap.put("districts_url", appURL + "/regions/" + region.getSlug() + "/districts");
 		}
+
+		return Helper.createResponse(regionMap, HttpStatus.OK);
+	}
+
+	@RequestMapping(path = "/{slug}", method = RequestMethod.GET)
+	public ResponseEntity<?> show(@PathVariable String slug) {
+
+		Region region = regionRepository.findFirstBySlug(slug);
+
+		if (region == null) {
+			HashMap<String, Object> outputMap = new HashMap<>();
+			outputMap.put("message", "Not Found");
+			return Helper.createResponse(outputMap, HttpStatus.BAD_REQUEST);
+		}
+
+		HashMap<String, Object> regionMap = new HashMap<>();
+		regionMap.put("id", region.getId());
+		regionMap.put("name", region.getName());
+		regionMap.put("districts_url", appURL + "/regions/" + region.getSlug() + "/districts");
 
 		return Helper.createResponse(regionMap, HttpStatus.OK);
 	}
@@ -62,10 +82,13 @@ public class RegionController {
 			HashMap<String, Object> districtMap = new HashMap<>();
 			districtMap.put("id", district.getId());
 			districtMap.put("name", district.getName());
+
 			HashMap<String, Object> regionMap = new HashMap<>();
 			regionMap.put("id", district.getRegion().getId());
 			regionMap.put("name", district.getRegion().getName());
+			regionMap.put("url", appURL + "/regions/" + region.getSlug());
 			regionMap.put("districts_url", appURL + "/regions/" + region.getSlug() + "/districts");
+
 			districtMap.put("region", regionMap);
 
 			districtsList.add(districtMap);
