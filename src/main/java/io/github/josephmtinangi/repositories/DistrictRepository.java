@@ -8,4 +8,6 @@ import io.github.josephmtinangi.models.District;
 @Repository
 public interface DistrictRepository extends JpaRepository<District, Long> {
 
+	public District findByRegionIdAndSlug(Long id, String slug);
+
 }

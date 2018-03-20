@@ -82,6 +82,8 @@ public class RegionController {
 			HashMap<String, Object> districtMap = new HashMap<>();
 			districtMap.put("id", district.getId());
 			districtMap.put("name", district.getName());
+			districtMap.put("url",
+					appURL + "/regions/" + district.getRegion().getSlug() + "/districts/" + district.getSlug());
 
 			HashMap<String, Object> regionMap = new HashMap<>();
 			regionMap.put("id", district.getRegion().getId());
