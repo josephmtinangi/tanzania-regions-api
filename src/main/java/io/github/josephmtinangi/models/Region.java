@@ -1,12 +1,15 @@
 package io.github.josephmtinangi.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -22,6 +25,9 @@ public class Region {
 	private String name;
 
 	private String slug;
+
+	@OneToMany(mappedBy = "region", targetEntity = District.class, fetch = FetchType.LAZY)
+	private List<District> districts;
 
 	@Column(name = "created_at", updatable = false)
 	private Date createdAt;
@@ -61,6 +67,14 @@ public class Region {
 
 	public void setSlug(String slug) {
 		this.slug = slug;
+	}
+
+	public List<District> getDistricts() {
+		return districts;
+	}
+
+	public void setDistricts(List<District> districts) {
+		this.districts = districts;
 	}
 
 	public Date getCreatedAt() {

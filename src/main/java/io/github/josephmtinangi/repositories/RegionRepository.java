@@ -8,4 +8,6 @@ import io.github.josephmtinangi.models.Region;
 @Repository
 public interface RegionRepository extends JpaRepository<Region, Long> {
 
+	public Region findFirstBySlug(String slug);
+
 }
