@@ -8,4 +8,6 @@ import io.github.josephmtinangi.models.Ward;
 @Repository
 public interface WardRepository extends JpaRepository<Ward, Long> {
 
+	public Ward findByDistrictIdAndSlug(Long id, String wardSlug);
+
 }

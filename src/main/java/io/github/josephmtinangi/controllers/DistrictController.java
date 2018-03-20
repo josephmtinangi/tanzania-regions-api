@@ -95,7 +95,8 @@ public class DistrictController {
 			HashMap<String, Object> wardMap = new HashMap<>();
 			wardMap.put("id", ward.getId());
 			wardMap.put("name", ward.getName());
-			wardMap.put("url", "");
+			wardMap.put("url", appURL + "/regions/" + district.getRegion().getSlug() + "/districts/"
+					+ district.getSlug() + "/wards/" + ward.getSlug());
 
 			wardsList.add(wardMap);
 		}

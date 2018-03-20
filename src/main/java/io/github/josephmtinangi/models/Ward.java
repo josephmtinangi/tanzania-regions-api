@@ -13,6 +13,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "wards")
 public class Ward {
@@ -25,6 +27,7 @@ public class Ward {
 
 	private String slug;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "district_id", nullable = false)
 	private District district;
