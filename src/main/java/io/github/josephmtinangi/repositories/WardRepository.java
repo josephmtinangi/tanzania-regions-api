@@ -10,4 +10,6 @@ public interface WardRepository extends JpaRepository<Ward, Long> {
 
 	public Ward findByDistrictIdAndSlug(Long id, String wardSlug);
 
+	public Ward findFirstByIdAndDistrictId(Long id, Long districtId);
+
 }

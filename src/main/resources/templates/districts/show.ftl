@@ -38,7 +38,9 @@
  		<#list district.wards as ward>
  			<tr>
  				<td>${ward.id}.</td>
- 				<td>${ward.name}</td>
+ 				<td>
+ 					<a href="<@spring.url '/dashboard/regions/${district.region.id}/districts/${district.id}/wards/${ward.id}'/>">${ward.name}</a>
+ 				</td>
  				<td>${ward.district.name}</td>
  				<td>${ward.createdAt}</td>
  			</tr>

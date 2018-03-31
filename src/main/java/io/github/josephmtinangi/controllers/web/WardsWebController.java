@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,6 +48,21 @@ public class WardsWebController {
 
 	@Autowired
 	private WardRepository wardRepository;
+
+	@RequestMapping(path = "/{wardId}", method = RequestMethod.GET)
+	public String show(Model model, @PathVariable Long regionId, @PathVariable Long districtId,
+			@PathVariable Long wardId) {
+
+		Region region = regionRepository.findOne(regionId);
+
+		District district = districtRepository.findFirstByIdAndRegionId(districtId, region.getId());
+
+		Ward ward = wardRepository.findFirstByIdAndDistrictId(wardId, district.getId());
+
+		model.addAttribute("ward", ward);
+
+		return "wards/show";
+	}
 
 	@RequestMapping(path = "", method = RequestMethod.POST)
 	public String store(@PathVariable Long regionId, @PathVariable Long districtId, @RequestParam MultipartFile file)

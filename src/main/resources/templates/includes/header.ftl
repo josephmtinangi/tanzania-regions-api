@@ -36,8 +36,6 @@
         <div id="navbar" class="navbar-collapse collapse">
         	<ul class="nav navbar-nav">
                 <li><a href="<@spring.url '/dashboard/regions' />">Regions</a></li>
-                <li><a href="<@spring.url '/dashboard/districts' />">Districts</a></li>
-                <li><a href="<@spring.url '/dashboard/wards' />">Wards</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#">Help</a></li>
