@@ -40,6 +40,7 @@ public class RegionController {
 			regionMap.put("name", region.getName());
 			regionMap.put("url", appURL + "/regions/" + region.getSlug());
 			regionMap.put("districts_url", appURL + "/regions/" + region.getSlug() + "/districts");
+			regionMap.put("districts", region.getDistricts());
 			regionList.add(regionMap);
 		}
 

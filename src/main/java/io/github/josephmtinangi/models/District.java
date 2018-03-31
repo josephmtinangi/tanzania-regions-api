@@ -16,6 +16,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "districts")
 public class District {
@@ -28,10 +30,12 @@ public class District {
 
 	private String slug;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "region_id", nullable = false)
 	private Region region;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "district", targetEntity = Ward.class, fetch = FetchType.LAZY)
 	private List<Ward> wards;
 

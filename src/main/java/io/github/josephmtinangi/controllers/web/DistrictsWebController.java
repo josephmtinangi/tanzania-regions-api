@@ -47,7 +47,8 @@ public class DistrictsWebController {
 
 		List<District> districtList = new ArrayList<>();
 		if (districts != null && districts.length > 0) {
-			for (String name : districts) {
+			for (String n : districts) {
+				String name = n.replaceAll("\\p{C}", "").trim();
 				District district = new District();
 				district.setName(name);
 				district.setSlug(name);
