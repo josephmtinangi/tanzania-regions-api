@@ -10,4 +10,6 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
 
 	public District findByRegionIdAndSlug(Long id, String slug);
 
+	public District findFirstByIdAndRegionId(Long id, Long regionId);
+
 }

@@ -13,7 +13,9 @@
  		<#list region.districts as district>
         <tr>
             <td>${district.id}.</td>
-            <td>${district.name}</td>
+            <td>
+                <a href="<@spring.url '/dashboard/regions/${region.id}/districts/${district.id}'/>">${district.name}</a>
+            </td>
             <td>${district.region.name}</td>
             <td>${district.createdAt}</td>
         </tr>

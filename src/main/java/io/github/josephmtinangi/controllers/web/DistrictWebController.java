@@ -1,31 +1,37 @@
 package io.github.josephmtinangi.controllers.web;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import io.github.josephmtinangi.models.District;
+import io.github.josephmtinangi.models.Region;
 import io.github.josephmtinangi.repositories.DistrictRepository;
+import io.github.josephmtinangi.repositories.RegionRepository;
 
 @Controller
-@RequestMapping(path = "/dashboard/districts")
+@RequestMapping(path = "/dashboard/regions")
 public class DistrictWebController {
 
-	@Autowired
-	private DistrictRepository districtRepository;
+    @Autowired
+    private RegionRepository regionRepository;
 
-	@RequestMapping(path = "", method = RequestMethod.GET)
-	public String index(Model model) {
+    @Autowired
+    private DistrictRepository districtRepository;
 
-		List<District> districts = districtRepository.findAll();
+    @RequestMapping(path = "/{regionId}/districts/{districtId}", method = RequestMethod.GET)
+    public String show(Model model, @PathVariable Long regionId, @PathVariable Long districtId) {
 
-		model.addAttribute("districts", districts);
+        Region region = regionRepository.findOne(regionId);
 
-		return "districts/index";
-	}
+        District district = districtRepository.findFirstByIdAndRegionId(districtId, region.getId());
+
+        model.addAttribute("district", district);
+
+        return "districts/show";
+    }
 
 }
