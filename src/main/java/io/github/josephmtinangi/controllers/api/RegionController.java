@@ -1,4 +1,4 @@
-package io.github.josephmtinangi.controllers;
+package io.github.josephmtinangi.controllers.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
