@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -26,5 +27,19 @@ public class RegionWebController {
 		model.addAttribute("regions", regions);
 
 		return "regions/index";
+	}
+
+	@RequestMapping(path = "/create", method = RequestMethod.GET)
+	public String create(Model model) {
+
+		return "regions/create";
+	}
+
+	@RequestMapping(path = "", method = RequestMethod.POST)
+	public String store(@ModelAttribute Region region) {
+
+		regionRepository.save(region);
+
+		return "redirect:/dashboard/regions";
 	}
 }

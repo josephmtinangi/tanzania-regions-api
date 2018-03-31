@@ -33,15 +33,17 @@ public class RegionController {
 
 		List<Region> regions = regionRepository.findAll();
 
-		HashMap<String, Object> regionMap = new HashMap<>();
+		ArrayList<Object> regionList = new ArrayList<>();
 
 		for (Region region : regions) {
+			HashMap<String, Object> regionMap = new HashMap<>();
 			regionMap.put("name", region.getName());
 			regionMap.put("url", appURL + "/regions/" + region.getSlug());
 			regionMap.put("districts_url", appURL + "/regions/" + region.getSlug() + "/districts");
+			regionList.add(regionMap);
 		}
 
-		return Helper.createResponse(regionMap, HttpStatus.OK);
+		return Helper.createResponse(regionList, HttpStatus.OK);
 	}
 
 	@RequestMapping(path = "/{slug}", method = RequestMethod.GET)
