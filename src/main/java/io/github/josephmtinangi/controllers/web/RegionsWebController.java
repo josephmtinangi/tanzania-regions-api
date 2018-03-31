@@ -15,7 +15,7 @@ import io.github.josephmtinangi.repositories.RegionRepository;
 
 @Controller
 @RequestMapping(path = "/dashboard/regions")
-public class RegionWebController {
+public class RegionsWebController {
 
 	@Autowired
 	private RegionRepository regionRepository;
