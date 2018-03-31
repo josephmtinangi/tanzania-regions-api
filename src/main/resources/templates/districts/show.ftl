@@ -6,7 +6,7 @@
   <br /><br />
  <div class="modal fade" id="modal-id">
  	<div class="modal-dialog">
- 		<form action="<@spring.url '/dashboard/regions/${district.region.id}/districts/${district.id}/wards'/>" method="POST" encytype="multipart/form-data" role="form">
+ 		<form action="<@spring.url '/dashboard/regions/${district.region.id}/districts/${district.id}/wards'/>" method="POST" enctype="multipart/form-data" role="form">
  		<div class="modal-content">
  			<div class="modal-header">
  				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
