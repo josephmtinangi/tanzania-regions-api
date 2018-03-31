@@ -14,7 +14,9 @@
  		<#list regions as region>
  			<tr>
  				<td>${region.id}.</td>
- 				<td>${region.name}</td>
+ 				<td>
+ 					<a href="<@spring.url '/dashboard/regions/${region.id}'/>">${region.name}</a>
+ 				</td>
  				<td>${region.createdAt}</td>
  			</tr>
  		</#list>
