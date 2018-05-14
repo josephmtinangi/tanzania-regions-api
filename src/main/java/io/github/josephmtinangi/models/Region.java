@@ -1,5 +1,7 @@
 package io.github.josephmtinangi.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class Region {
 
 	private String slug;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "region", targetEntity = District.class, fetch = FetchType.LAZY)
 	private List<District> districts;
 

@@ -1,5 +1,7 @@
 package io.github.josephmtinangi.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -25,6 +27,7 @@ public class Village {
 
 	private String slug;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "ward_id", nullable = false)
 	private Ward ward;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.github.josephmtinangi.repositories.DistrictRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class RegionController {
 
     @Autowired
     private RegionRepository regionRepository;
+
+    @Autowired
+    private DistrictRepository districtRepository;
 
     @RequestMapping(path = "", method = RequestMethod.GET)
     public ResponseEntity<?> index() {
@@ -94,6 +98,21 @@ public class RegionController {
         }
 
         return Helper.createResponse(districtsList, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/{slug}/districts", method = RequestMethod.POST)
+    public ResponseEntity<?> storeDistricts(@PathVariable String slug, @ModelAttribute District district) {
+
+        Region region = regionRepository.findFirstBySlug(slug);
+
+        if(region == null){
+            return Helper.createResponse(Helper.createMessage("Region not found"), HttpStatus.BAD_REQUEST);
+        }
+
+        district.setRegion(region);
+        District newDistrict = districtRepository.save(district);
+
+        return Helper.createResponse(newDistrict, HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "", method = RequestMethod.POST)
