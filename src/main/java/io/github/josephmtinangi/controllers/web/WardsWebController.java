@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.slugify.Slugify;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,81 +36,83 @@ import io.github.josephmtinangi.utilities.Helper;
 @RequestMapping(path = "/dashboard/regions/{regionId}/districts/{districtId}/wards")
 public class WardsWebController {
 
-	@Value("${app.rootStorage}")
-	private String rootStorage;
+    @Value("${app.rootStorage}")
+    private String rootStorage;
 
-	private static final Logger log = LoggerFactory.getLogger(WardsWebController.class);
+    private static final Logger log = LoggerFactory.getLogger(WardsWebController.class);
 
-	@Autowired
-	private RegionRepository regionRepository;
+    @Autowired
+    private RegionRepository regionRepository;
 
-	@Autowired
-	private DistrictRepository districtRepository;
+    @Autowired
+    private DistrictRepository districtRepository;
 
-	@Autowired
-	private WardRepository wardRepository;
+    @Autowired
+    private WardRepository wardRepository;
 
-	@RequestMapping(path = "/{wardId}", method = RequestMethod.GET)
-	public String show(Model model, @PathVariable Long regionId, @PathVariable Long districtId,
-			@PathVariable Long wardId) {
+    @RequestMapping(path = "/{wardId}", method = RequestMethod.GET)
+    public String show(Model model, @PathVariable Long regionId, @PathVariable Long districtId,
+                       @PathVariable Long wardId) {
 
-		Region region = regionRepository.findOne(regionId);
+        Region region = regionRepository.findOne(regionId);
 
-		District district = districtRepository.findFirstByIdAndRegionId(districtId, region.getId());
+        District district = districtRepository.findFirstByIdAndRegionId(districtId, region.getId());
 
-		Ward ward = wardRepository.findFirstByIdAndDistrictId(wardId, district.getId());
+        Ward ward = wardRepository.findFirstByIdAndDistrictId(wardId, district.getId());
 
-		model.addAttribute("ward", ward);
+        model.addAttribute("ward", ward);
 
-		return "wards/show";
-	}
+        return "wards/show";
+    }
 
-	@RequestMapping(path = "", method = RequestMethod.POST)
-	public String store(@PathVariable Long regionId, @PathVariable Long districtId, @RequestParam MultipartFile file)
-			throws Exception {
+    @RequestMapping(path = "", method = RequestMethod.POST)
+    public String store(@PathVariable Long regionId, @PathVariable Long districtId, @RequestParam MultipartFile file)
+            throws Exception {
 
-		Region region = regionRepository.findOne(regionId);
+        Region region = regionRepository.findOne(regionId);
 
-		District district = districtRepository.findFirstByIdAndRegionId(districtId, region.getId());
+        District district = districtRepository.findFirstByIdAndRegionId(districtId, region.getId());
 
-		if (file != null && !file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
 
-			try {
+            try {
 
-				String filepath = rootStorage + "/" + Helper.saveFile(file, rootStorage);
-				log.info("filepath = " + filepath);
+                String filepath = rootStorage + "/" + Helper.saveFile(file, rootStorage);
+                log.info("filepath = " + filepath);
 
-				File f = new File(filepath);
+                File f = new File(filepath);
 
-				Path path = Paths.get(f.getAbsolutePath());
-				log.info("path = " + path);
+                Path path = Paths.get(f.getAbsolutePath());
+                log.info("path = " + path);
 
-				Reader reader = Files.newBufferedReader(path);
-				CSVReader csvReader = new CSVReader(reader);
+                Reader reader = Files.newBufferedReader(path);
+                CSVReader csvReader = new CSVReader(reader);
 
-				String[] nextLine;
+                String[] nextLine;
 
-				List<Ward> wardList = new ArrayList<>();
-				while ((nextLine = csvReader.readNext()) != null) {
-					log.info(nextLine[0]);
-					Ward ward = new Ward();
-					ward.setName(nextLine[0]);
-					ward.setSlug(nextLine[0]);
-					ward.setDistrict(district);
+                List<Ward> wardList = new ArrayList<>();
+                while ((nextLine = csvReader.readNext()) != null) {
+                    Ward ward = new Ward();
+                    ward.setName(nextLine[0]);
+                    Slugify slg = new Slugify();
+                    String result = slg.slugify(nextLine[0]);
+                    log.info("Slug = " + result);
+                    ward.setSlug(result);
+                    ward.setDistrict(district);
 
-					wardList.add(ward);
-				}
+                    wardList.add(ward);
+                }
 
-				wardRepository.save(wardList);
+                wardRepository.save(wardList);
 
-				csvReader.close();
+                csvReader.close();
 
-			} catch (IOException e) {
+            } catch (IOException e) {
 
-				e.printStackTrace();
-			}
-		}
+                e.printStackTrace();
+            }
+        }
 
-		return "redirect:/dashboard/regions/" + region.getId() + "/districts/" + district.getId();
-	}
+        return "redirect:/dashboard/regions/" + region.getId() + "/districts/" + district.getId();
+    }
 }
