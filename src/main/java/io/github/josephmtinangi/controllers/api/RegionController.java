@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.github.josephmtinangi.repositories.DistrictRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.github.josephmtinangi.models.District;
 import io.github.josephmtinangi.models.Region;
@@ -22,16 +20,17 @@ import io.github.josephmtinangi.utilities.Helper;
 @RequestMapping(path = "/regions")
 public class RegionController {
 
-	@Value("${app.url}")
-	private String appURL;
+    @Value("${app.url}")
+    private String appURL;
 
-	@Autowired
-	private RegionRepository regionRepository;
+    @Autowired
+    private RegionRepository regionRepository;
 
-	@RequestMapping(path = "", method = RequestMethod.GET)
-	public ResponseEntity<?> index() {
+    @Autowired
+    private DistrictRepository districtRepository;
 
-		List<Region> regions = regionRepository.findAll();
+    @RequestMapping(path = "", method = RequestMethod.GET)
+    public ResponseEntity<?> index() {
 
 		ArrayList<Object> regionList = new ArrayList<>();
 
@@ -47,58 +46,82 @@ public class RegionController {
 		return Helper.createResponse(regionList, HttpStatus.OK);
 	}
 
-	@RequestMapping(path = "/{slug}", method = RequestMethod.GET)
-	public ResponseEntity<?> show(@PathVariable String slug) {
 
-		Region region = regionRepository.findFirstBySlug(slug);
+    @RequestMapping(path = "/{slug}", method = RequestMethod.GET)
+    public ResponseEntity<?> show(@PathVariable String slug) {
 
-		if (region == null) {
-			HashMap<String, Object> outputMap = new HashMap<>();
-			outputMap.put("message", "Not Found");
-			return Helper.createResponse(outputMap, HttpStatus.BAD_REQUEST);
-		}
+        Region region = regionRepository.findFirstBySlug(slug);
 
-		HashMap<String, Object> regionMap = new HashMap<>();
-		regionMap.put("id", region.getId());
-		regionMap.put("name", region.getName());
-		regionMap.put("districts_url", appURL + "/regions/" + region.getSlug() + "/districts");
+        if (region == null) {
+            HashMap<String, Object> outputMap = new HashMap<>();
+            outputMap.put("message", "Not Found");
+            return Helper.createResponse(outputMap, HttpStatus.BAD_REQUEST);
+        }
 
-		return Helper.createResponse(regionMap, HttpStatus.OK);
-	}
+        HashMap<String, Object> regionMap = new HashMap<>();
+        regionMap.put("id", region.getId());
+        regionMap.put("name", region.getName());
+        regionMap.put("districts_url", appURL + "/regions/" + region.getSlug() + "/districts");
 
-	@RequestMapping(path = "/{slug}/districts", method = RequestMethod.GET)
-	public ResponseEntity<?> districts(@PathVariable String slug) {
+        return Helper.createResponse(regionMap, HttpStatus.OK);
+    }
 
-		Region region = regionRepository.findFirstBySlug(slug);
+    @RequestMapping(path = "/{slug}/districts", method = RequestMethod.GET)
+    public ResponseEntity<?> districts(@PathVariable String slug) {
 
-		if (region == null) {
-			HashMap<String, Object> outputMap = new HashMap<>();
-			outputMap.put("message", "Not Found");
-			return Helper.createResponse(outputMap, HttpStatus.BAD_REQUEST);
-		}
+        Region region = regionRepository.findFirstBySlug(slug);
 
-		List<District> districs = region.getDistricts();
+        if (region == null) {
+            HashMap<String, Object> outputMap = new HashMap<>();
+            outputMap.put("message", "Not Found");
+            return Helper.createResponse(outputMap, HttpStatus.BAD_REQUEST);
+        }
 
-		ArrayList<Object> districtsList = new ArrayList<>();
+        List<District> districs = region.getDistricts();
 
-		for (District district : districs) {
-			HashMap<String, Object> districtMap = new HashMap<>();
-			districtMap.put("id", district.getId());
-			districtMap.put("name", district.getName());
-			districtMap.put("url",
-					appURL + "/regions/" + district.getRegion().getSlug() + "/districts/" + district.getSlug());
+        ArrayList<Object> districtsList = new ArrayList<>();
 
-			HashMap<String, Object> regionMap = new HashMap<>();
-			regionMap.put("id", district.getRegion().getId());
-			regionMap.put("name", district.getRegion().getName());
-			regionMap.put("url", appURL + "/regions/" + region.getSlug());
-			regionMap.put("districts_url", appURL + "/regions/" + region.getSlug() + "/districts");
+        for (District district : districs) {
+            HashMap<String, Object> districtMap = new HashMap<>();
+            districtMap.put("id", district.getId());
+            districtMap.put("name", district.getName());
+            districtMap.put("url",
+                    appURL + "/regions/" + district.getRegion().getSlug() + "/districts/" + district.getSlug());
 
-			districtMap.put("region", regionMap);
+            HashMap<String, Object> regionMap = new HashMap<>();
+            regionMap.put("id", district.getRegion().getId());
+            regionMap.put("name", district.getRegion().getName());
+            regionMap.put("url", appURL + "/regions/" + region.getSlug());
+            regionMap.put("districts_url", appURL + "/regions/" + region.getSlug() + "/districts");
 
-			districtsList.add(districtMap);
-		}
+            districtMap.put("region", regionMap);
 
-		return Helper.createResponse(districtsList, HttpStatus.OK);
-	}
+            districtsList.add(districtMap);
+        }
+
+        return Helper.createResponse(districtsList, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/{slug}/districts", method = RequestMethod.POST)
+    public ResponseEntity<?> storeDistricts(@PathVariable String slug, @ModelAttribute District district) {
+
+        Region region = regionRepository.findFirstBySlug(slug);
+
+        if(region == null){
+            return Helper.createResponse(Helper.createMessage("Region not found"), HttpStatus.BAD_REQUEST);
+        }
+
+        district.setRegion(region);
+        District newDistrict = districtRepository.save(district);
+
+        return Helper.createResponse(newDistrict, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "", method = RequestMethod.POST)
+    public ResponseEntity<?> store(@ModelAttribute Region region) {
+
+        Region newRegion = regionRepository.save(region);
+
+        return Helper.createResponse(newRegion, HttpStatus.CREATED);
+    }
 }
