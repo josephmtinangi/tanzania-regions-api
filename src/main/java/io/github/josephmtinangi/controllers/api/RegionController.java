@@ -32,8 +32,9 @@ public class RegionController {
     @RequestMapping(path = "", method = RequestMethod.GET)
     public ResponseEntity<?> index() {
 
-		ArrayList<Object> regionList = new ArrayList<>();
+        List<Region> regions = regionRepository.findAll();
 
+		ArrayList<Object> regionList = new ArrayList<>();
 		for (Region region : regions) {
 			HashMap<String, Object> regionMap = new HashMap<>();
 			regionMap.put("name", region.getName());

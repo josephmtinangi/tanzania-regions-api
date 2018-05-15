@@ -30,43 +30,43 @@ public class Helper {
         output.put("message", message);
         output.put("documentation_url", appURL + "/docs");
 
-	public static String saveFile(MultipartFile file, String rootStorage) throws Exception {
-
-		String fileName = "";
-		String fileHashName = "";
-
-		new File(rootStorage + "/").mkdirs();
-
-		try {
-			// Get the file and save it somewhere
-			byte[] bytes = file.getBytes();
-
-			fileName = file.getOriginalFilename();
-
-			// System.out.println(fileName);
-
-			String fileNameTokens[] = fileName.split("\\.");
-
-			fileHashName = UUID.randomUUID().toString();
-
-			if (fileNameTokens.length > 1) {
-				fileHashName += "." + fileNameTokens[fileNameTokens.length - 1];
-			}
-
-			Path path = Paths.get(rootStorage + "/" + fileHashName);
-
-			Files.write(path, bytes);
-
-			// System.out.println(path);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return fileHashName;
-
-	}
-
         return output;
+    }
+
+    public static String saveFile(MultipartFile file, String rootStorage) throws Exception {
+
+        String fileName = "";
+        String fileHashName = "";
+
+        new File(rootStorage + "/").mkdirs();
+
+        try {
+            // Get the file and save it somewhere
+            byte[] bytes = file.getBytes();
+
+            fileName = file.getOriginalFilename();
+
+            // System.out.println(fileName);
+
+            String fileNameTokens[] = fileName.split("\\.");
+
+            fileHashName = UUID.randomUUID().toString();
+
+            if (fileNameTokens.length > 1) {
+                fileHashName += "." + fileNameTokens[fileNameTokens.length - 1];
+            }
+
+            Path path = Paths.get(rootStorage + "/" + fileHashName);
+
+            Files.write(path, bytes);
+
+            // System.out.println(path);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return fileHashName;
+
     }
 }
