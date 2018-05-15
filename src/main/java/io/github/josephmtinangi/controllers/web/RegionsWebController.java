@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.slugify.Slugify;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,9 @@ public class RegionsWebController {
 	@RequestMapping(path = "", method = RequestMethod.POST)
 	public String store(@ModelAttribute Region region) {
 
+		Slugify slg = new Slugify();
+		String result = slg.slugify(region.getName());
+		region.setSlug(result);
 		regionRepository.save(region);
 
 		return "redirect:/dashboard/regions";
