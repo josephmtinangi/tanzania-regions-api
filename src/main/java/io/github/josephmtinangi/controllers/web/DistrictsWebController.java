@@ -3,6 +3,7 @@ package io.github.josephmtinangi.controllers.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.slugify.Slugify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,7 +52,9 @@ public class DistrictsWebController {
 				String name = n.replaceAll("\\p{C}", "").trim();
 				District district = new District();
 				district.setName(name);
-				district.setSlug(name);
+				Slugify slg = new Slugify();
+				String result = slg.slugify(name);
+				district.setSlug(result);
 				district.setRegion(region);
 
 				districtList.add(district);
