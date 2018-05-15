@@ -13,4 +13,4 @@ before_install:
   - chmod +x mvnw
 before_script:
   - psql -c "CREATE USER toor WITH PASSWORD 'toor';" -U postgres
-  - psql -c "CREATE DATABASE tanzania_regions;" -U toor
+  - psql -c "CREATE DATABASE tanzania_regions;" -U postgres
