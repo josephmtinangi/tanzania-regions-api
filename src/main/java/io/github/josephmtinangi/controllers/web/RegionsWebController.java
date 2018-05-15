@@ -34,7 +34,7 @@ public class RegionsWebController {
 
 	private static final Logger log = LoggerFactory.getLogger(RegionsWebController.class);
 
-	@Value("${app.rootStorage}")
+	@Value("${appRootStorage}")
 	private String rootStorage;
 
 	@Autowired

@@ -20,7 +20,7 @@ import io.github.josephmtinangi.utilities.Helper;
 @RequestMapping(path = "/regions")
 public class RegionController {
 
-    @Value("${app.url}")
+    @Value("${appURL}")
     private String appURL;
 
     @Autowired

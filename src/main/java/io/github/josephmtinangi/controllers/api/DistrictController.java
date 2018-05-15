@@ -23,7 +23,7 @@ import io.github.josephmtinangi.utilities.Helper;
 @RequestMapping(path = "/regions/{regionSlug}/districts")
 public class DistrictController {
 
-	@Value("${app.url}")
+	@Value("${appURL}")
 	private String appURL;
 
 	@Autowired

@@ -36,7 +36,7 @@ import io.github.josephmtinangi.utilities.Helper;
 @RequestMapping(path = "/dashboard/regions/{regionId}/districts/{districtId}/wards")
 public class WardsWebController {
 
-    @Value("${app.rootStorage}")
+    @Value("${appRootStorage}")
     private String rootStorage;
 
     private static final Logger log = LoggerFactory.getLogger(WardsWebController.class);

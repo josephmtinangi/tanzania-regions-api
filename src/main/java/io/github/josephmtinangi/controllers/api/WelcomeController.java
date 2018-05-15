@@ -15,7 +15,7 @@ import io.github.josephmtinangi.utilities.Helper;
 @RequestMapping(path = "/")
 public class WelcomeController {
 
-	@Value("${app.url}")
+	@Value("${appURL}")
 	private String appURL;
 
 	@RequestMapping(path = "", method = RequestMethod.GET)
