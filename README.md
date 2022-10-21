@@ -6,7 +6,7 @@ Get information about Tanzania regions via RESTful API [https://tanzania-regions
 
 ## API Endpoints
 
-Below are described the REST endpoints available that you can use to get information about Tanzania regions
+Below are described the REST endpoints available that you can use to get information about Tanzania regions.
 
 ### All
 
